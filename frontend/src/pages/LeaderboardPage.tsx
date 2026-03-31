@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { nakama } from "../services/nakama";
-import { PlayerStats } from "../types/game";
+import type { PlayerStats } from "../types/game";
 
 interface LeaderboardEntry {
   ownerId: string;
@@ -29,7 +29,7 @@ export function LeaderboardPage() {
         const records: (LeaderboardEntry & { stats?: PlayerStats })[] =
           result.records.map((r, i) => ({
             ownerId: r.owner_id!,
-            username: r.username?.value || "Unknown",
+            username: (r.username as unknown as { value: string } | undefined)?.value || r.username as unknown as string || "Unknown",
             score: Number(r.score) || 0,
             subscore: Number(r.subscore) || 0,
             rank: r.rank ? Number(r.rank) : i + 1,

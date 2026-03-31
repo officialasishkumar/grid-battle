@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useGameStore } from "../store/gameStore";
 import { useAuthStore } from "../store/authStore";
 import { nakama } from "../services/nakama";
-import { GameMode, MatchInfo, PlayerStats } from "../types/game";
+import { GameMode } from "../types/game";
+import type { MatchInfo, PlayerStats } from "../types/game";
 
 export function LobbyPage() {
   const [selectedMode, setSelectedMode] = useState<GameMode>(GameMode.CLASSIC);

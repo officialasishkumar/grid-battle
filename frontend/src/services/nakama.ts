@@ -1,4 +1,5 @@
-import { Client, Session, Socket } from "@heroiclabs/nakama-js";
+import { Client, Session } from "@heroiclabs/nakama-js";
+import type { Socket } from "@heroiclabs/nakama-js";
 
 const NAKAMA_HOST = import.meta.env.VITE_NAKAMA_HOST || "127.0.0.1";
 const NAKAMA_PORT = import.meta.env.VITE_NAKAMA_PORT || "7350";
@@ -98,7 +99,7 @@ class NakamaService {
   async rpc<T>(id: string, payload?: object): Promise<T> {
     if (!this._session) throw new Error("No session");
     const result = await this.client.rpc(this._session, id, payload || {});
-    return JSON.parse(result.payload as string) as T;
+    return JSON.parse(result.payload as unknown as string) as T;
   }
 
   /** Fetch leaderboard records. */

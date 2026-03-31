@@ -1,33 +1,36 @@
 /** Must stay in sync with backend/src/types.ts */
 
-export enum OpCode {
-  MOVE = 1,
-  STATE_UPDATE = 2,
-  GAME_OVER = 3,
-  MOVE_REJECTED = 4,
-  OPPONENT_JOINED = 5,
-  OPPONENT_LEFT = 6,
-  TURN_TIMER = 7,
-  REMATCH_REQUEST = 8,
-  REMATCH_ACCEPTED = 9,
-}
+export const OpCode = {
+  MOVE: 1,
+  STATE_UPDATE: 2,
+  GAME_OVER: 3,
+  MOVE_REJECTED: 4,
+  OPPONENT_JOINED: 5,
+  OPPONENT_LEFT: 6,
+  TURN_TIMER: 7,
+  REMATCH_REQUEST: 8,
+  REMATCH_ACCEPTED: 9,
+} as const;
 
-export enum Mark {
-  EMPTY = 0,
-  X = 1,
-  O = 2,
-}
+export const Mark = {
+  EMPTY: 0,
+  X: 1,
+  O: 2,
+} as const;
+export type Mark = (typeof Mark)[keyof typeof Mark];
 
-export enum Phase {
-  WAITING = 0,
-  PLAYING = 1,
-  FINISHED = 2,
-}
+export const Phase = {
+  WAITING: 0,
+  PLAYING: 1,
+  FINISHED: 2,
+} as const;
+export type Phase = (typeof Phase)[keyof typeof Phase];
 
-export enum GameMode {
-  CLASSIC = "classic",
-  TIMED = "timed",
-}
+export const GameMode = {
+  CLASSIC: "classic",
+  TIMED: "timed",
+} as const;
+export type GameMode = (typeof GameMode)[keyof typeof GameMode];
 
 export interface PlayerInfo {
   mark: Mark;
@@ -67,13 +70,4 @@ export interface PlayerStats {
   currentStreak: number;
   bestStreak: number;
   totalGames: number;
-}
-
-export interface LeaderboardRecord {
-  ownerId: string;
-  username: string;
-  score: number;
-  subscore: number;
-  rank: number;
-  stats?: PlayerStats;
 }

@@ -5,6 +5,8 @@ import {
   Mark,
   Phase,
   GameMode,
+} from "../types/game";
+import type {
   StateUpdate,
   GameOverData,
   PlayerInfo,
@@ -99,7 +101,7 @@ export const useGameStore = create<GameState>((set, get) => ({
           case OpCode.STATE_UPDATE: {
             const update = data as StateUpdate;
             const myUserId = nakama.userId;
-            let myMark = Mark.EMPTY;
+            let myMark: Mark = Mark.EMPTY;
             if (myUserId && update.players[myUserId]) {
               myMark = update.players[myUserId].mark;
             }
