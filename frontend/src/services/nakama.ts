@@ -99,7 +99,10 @@ class NakamaService {
   async rpc<T>(id: string, payload?: object): Promise<T> {
     if (!this._session) throw new Error("No session");
     const result = await this.client.rpc(this._session, id, payload || {});
-    return JSON.parse(result.payload as unknown as string) as T;
+    if (typeof result.payload === "string") {
+      return JSON.parse(result.payload) as T;
+    }
+    return result.payload as T;
   }
 
   /** Fetch leaderboard records. */
