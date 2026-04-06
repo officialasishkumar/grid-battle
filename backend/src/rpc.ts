@@ -6,7 +6,7 @@ import { GameMode, STATS_COLLECTION, STATS_KEY, PlayerStats } from "./types";
  * Payload: { "gameMode": "classic" | "timed" }
  * Response: { "matchId": "...", "created": true|false }
  */
-export const rpcFindMatch: nkruntime.RpcFunction = function (
+export var rpcFindMatch: nkruntime.RpcFunction = function (
   ctx,
   logger,
   nk,
@@ -56,7 +56,7 @@ export const rpcFindMatch: nkruntime.RpcFunction = function (
  * Payload: { "userId": "..." } (optional, defaults to caller)
  * Response: PlayerStats
  */
-export const rpcGetStats: nkruntime.RpcFunction = function (
+export var rpcGetStats: nkruntime.RpcFunction = function (
   ctx,
   _logger,
   nk,
@@ -100,7 +100,7 @@ export const rpcGetStats: nkruntime.RpcFunction = function (
  *
  * Response: Array of match summaries.
  */
-export const rpcListMatches: nkruntime.RpcFunction = function (
+export var rpcListMatches: nkruntime.RpcFunction = function (
   _ctx,
   _logger,
   nk,

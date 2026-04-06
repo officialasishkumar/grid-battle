@@ -14,12 +14,36 @@ import { LEADERBOARD_ID, GameMode } from "./types";
  * Nakama server module entry point.
  * Registers match handlers, RPCs, matchmaker hooks, and leaderboards.
  */
-const InitModule: nkruntime.InitModule = function (
-  ctx,
+var matchmakerMatched: nkruntime.MatchmakerMatchedFunction = function (
+  _ctx,
   logger,
   nk,
-  initializer
-) {
+  matches
+): string | void {
+  let gameMode = GameMode.CLASSIC;
+  if (
+    matches.length > 0 &&
+    matches[0].properties["gameMode"] === GameMode.TIMED
+  ) {
+    gameMode = GameMode.TIMED;
+  }
+
+  const matchId = nk.matchCreate("grid_battle", { gameMode });
+  logger.info(
+    "matchmaker paired %d players → match %s (mode: %s)",
+    matches.length,
+    matchId,
+    gameMode
+  );
+  return matchId;
+};
+
+function InitModule(
+  ctx: nkruntime.Context,
+  logger: nkruntime.Logger,
+  nk: nkruntime.Nakama,
+  initializer: nkruntime.Initializer
+): void {
   logger.info("grid-battle module loaded – version %s", ctx.env["version"] || "dev");
 
   // ── Register authoritative match handler ──
@@ -39,30 +63,7 @@ const InitModule: nkruntime.InitModule = function (
   initializer.registerRpc("list_matches", rpcListMatches);
 
   // ── Matchmaker hook: auto-create match when two players are paired ──
-  initializer.registerMatchmakerMatched(function (
-    _ctx,
-    logger,
-    nk,
-    matches
-  ): string | void {
-    // Determine game mode from the first ticket's string properties
-    let gameMode = GameMode.CLASSIC;
-    if (
-      matches.length > 0 &&
-      (matches[0].properties as any)?.stringProperties?.["gameMode"] === GameMode.TIMED
-    ) {
-      gameMode = GameMode.TIMED;
-    }
-
-    const matchId = nk.matchCreate("grid_battle", { gameMode });
-    logger.info(
-      "matchmaker paired %d players → match %s (mode: %s)",
-      matches.length,
-      matchId,
-      gameMode
-    );
-    return matchId;
-  });
+  initializer.registerMatchmakerMatched(matchmakerMatched);
 
   // ── Create leaderboard if it doesn't exist ──
   try {
@@ -81,8 +82,8 @@ const InitModule: nkruntime.InitModule = function (
   }
 
   logger.info("grid-battle module initialized successfully");
-};
+}
 
 // Required: expose InitModule to the Nakama runtime.
 // @ts-ignore: top-level export for Nakama runtime
-!InitModule && InitModule;
+!InitModule && InitModule.bind(null);
