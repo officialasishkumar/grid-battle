@@ -1,6 +1,33 @@
 import { create } from "zustand";
 import { nakama } from "../services/nakama";
 
+async function getErrorMessage(err: unknown, fallback: string): Promise<string> {
+  if (err instanceof Response) {
+    try {
+      const data = await err.clone().json() as { message?: string };
+      if (typeof data.message === "string" && data.message.length > 0) {
+        return data.message;
+      }
+    } catch {
+      // Fall back below if the response body isn't JSON.
+    }
+
+    if (err.statusText) {
+      return err.statusText;
+    }
+  }
+
+  if (err instanceof Error) {
+    return err.message;
+  }
+
+  if (typeof err === "object" && err !== null && "message" in err && typeof err.message === "string") {
+    return err.message;
+  }
+
+  return fallback;
+}
+
 interface AuthState {
   userId: string | null;
   username: string | null;
@@ -34,7 +61,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       });
     } catch (err) {
       set({
-        error: err instanceof Error ? err.message : "Authentication failed",
+        error: await getErrorMessage(err, "Authentication failed"),
         isLoading: false,
       });
     }
@@ -52,7 +79,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       });
     } catch (err) {
       set({
-        error: err instanceof Error ? err.message : "Authentication failed",
+        error: await getErrorMessage(err, "Authentication failed"),
         isLoading: false,
       });
     }
