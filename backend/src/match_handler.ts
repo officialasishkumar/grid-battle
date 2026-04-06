@@ -80,7 +80,7 @@ function updateLabel(state: MatchState): string {
 
 // ── Match handler functions ───────────────────────────────────
 
-export const matchInit: nkruntime.MatchInitFunction = function (
+export var matchInit: nkruntime.MatchInitFunction = function (
   _ctx,
   logger,
   _nk,
@@ -118,7 +118,7 @@ export const matchInit: nkruntime.MatchInitFunction = function (
   };
 };
 
-export const matchJoinAttempt: nkruntime.MatchJoinAttemptFunction = function (
+export var matchJoinAttempt: nkruntime.MatchJoinAttemptFunction = function (
   _ctx,
   logger,
   _nk,
@@ -142,7 +142,7 @@ export const matchJoinAttempt: nkruntime.MatchJoinAttemptFunction = function (
   return { state: s, accept: true };
 };
 
-export const matchJoin: nkruntime.MatchJoinFunction = function (
+export var matchJoin: nkruntime.MatchJoinFunction = function (
   _ctx,
   logger,
   nk,
@@ -216,7 +216,7 @@ export const matchJoin: nkruntime.MatchJoinFunction = function (
   return { state: s };
 };
 
-export const matchLeave: nkruntime.MatchLeaveFunction = function (
+export var matchLeave: nkruntime.MatchLeaveFunction = function (
   _ctx,
   logger,
   nk,
@@ -277,7 +277,7 @@ export const matchLeave: nkruntime.MatchLeaveFunction = function (
   return { state: s };
 };
 
-export const matchLoop: nkruntime.MatchLoopFunction = function (
+export var matchLoop: nkruntime.MatchLoopFunction = function (
   _ctx,
   logger,
   nk,
@@ -473,7 +473,7 @@ export const matchLoop: nkruntime.MatchLoopFunction = function (
   return { state: s };
 };
 
-export const matchTerminate: nkruntime.MatchTerminateFunction = function (
+export var matchTerminate: nkruntime.MatchTerminateFunction = function (
   _ctx,
   logger,
   _nk,
@@ -500,7 +500,7 @@ export const matchTerminate: nkruntime.MatchTerminateFunction = function (
   return { state };
 };
 
-export const matchSignal: nkruntime.MatchSignalFunction = function (
+export var matchSignal: nkruntime.MatchSignalFunction = function (
   _ctx,
   _logger,
   _nk,

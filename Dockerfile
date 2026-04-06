@@ -20,6 +20,5 @@ COPY render-entrypoint.sh /nakama/render-entrypoint.sh
 
 USER root
 RUN chmod +x /nakama/render-entrypoint.sh
-USER nakama
 
 ENTRYPOINT ["/nakama/render-entrypoint.sh"]
