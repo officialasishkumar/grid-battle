@@ -111,6 +111,12 @@ class NakamaService {
     return this.client.listLeaderboardRecords(this._session, "global_rankings", undefined, limit);
   }
 
+  /** Fetch user profiles by ID. */
+  async getUsers(userIds: string[]) {
+    if (!this._session) throw new Error("No session");
+    return this.client.getUsers(this._session, userIds);
+  }
+
   /** Disconnect and clear session. */
   logout() {
     this._socket?.disconnect(false);

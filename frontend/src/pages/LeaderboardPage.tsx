@@ -35,6 +35,30 @@ export function LeaderboardPage() {
             rank: r.rank ? Number(r.rank) : i + 1,
           }));
 
+        const unknownUserIds = records
+          .filter((entry) => entry.username === "Unknown")
+          .map((entry) => entry.ownerId);
+
+        if (unknownUserIds.length > 0) {
+          try {
+            const users = await nakama.getUsers(unknownUserIds);
+            const namesById = new Map(
+              (users.users || []).map((user) => [
+                user.id,
+                user.display_name || user.username || "Unknown",
+              ])
+            );
+
+            for (const entry of records) {
+              if (entry.username === "Unknown") {
+                entry.username = namesById.get(entry.ownerId) || entry.username;
+              }
+            }
+          } catch {
+            // non-critical fallback for older leaderboard records
+          }
+        }
+
         // Fetch stats for each player
         for (const entry of records) {
           try {

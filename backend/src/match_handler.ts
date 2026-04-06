@@ -569,7 +569,21 @@ function updatePlayerStats(
       // Update leaderboard (score = wins * 100 - losses * 50 + draws * 10)
       const score = stats.wins * 100 - stats.losses * 50 + stats.draws * 10;
       const subscore = stats.bestStreak;
-      nk.leaderboardRecordWrite(LEADERBOARD_ID, userId, undefined, score, subscore, undefined);
+      let leaderboardName = state.players[userId]?.odisplayName;
+      if (!leaderboardName) {
+        const users = nk.usersGetId([userId]);
+        if (users.length > 0) {
+          leaderboardName = users[0].displayName || users[0].username;
+        }
+      }
+      nk.leaderboardRecordWrite(
+        LEADERBOARD_ID,
+        userId,
+        leaderboardName || userId,
+        score,
+        subscore,
+        undefined
+      );
 
       logger.info(
         "stats updated for %s: W%d L%d D%d streak:%d",
